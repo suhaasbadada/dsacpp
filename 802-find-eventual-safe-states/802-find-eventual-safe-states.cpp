@@ -1,19 +1,16 @@
 class Solution {
 public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
-        // reverse edges + BFS
         int n=graph.size();
-        vector<vector<int>> rgraph(n);
-        vector<int> incoming(n,0),safe;
-
+        vector<int> rgraph[n],incoming(n,0),safe;
+        
         for(int i=0;i<n;i++){
             int node=i;
-            for(auto nghbr:graph[i]){
-                rgraph[nghbr].push_back(i);
-                incoming[i]++;
+            for(auto nghbr:graph[node]){
+                rgraph[nghbr].push_back(node);
+                incoming[node]++;
             }
         }
-        
         
         queue<int> q;
         for(int i=0;i<n;i++){
@@ -23,11 +20,11 @@ public:
         }
         
         while(!q.empty()){
-            int cnode=q.front();
+            int node=q.front();
             q.pop();
-            safe.push_back(cnode);
+            safe.push_back(node);
             
-            for(auto nghbr:rgraph[cnode]){
+            for(auto nghbr:rgraph[node]){
                 incoming[nghbr]--;
                 if(incoming[nghbr]==0){
                     q.push(nghbr);
@@ -36,7 +33,6 @@ public:
         }
         
         sort(safe.begin(),safe.end());
-        
         return safe;
     }
 };
